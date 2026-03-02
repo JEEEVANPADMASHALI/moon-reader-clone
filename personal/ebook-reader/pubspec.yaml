@@ -28,7 +28,8 @@ dependencies:
   json_annotation: ^4.9.0
 
   # E-book rendering
-  epub_view: any
+  epub_view:
+    path: packages/epub_view
   pdfrx: ^1.0.70
 
   # Text-to-speech
