@@ -84,7 +84,7 @@ class BookDetailScreen extends ConsumerWidget {
                         width: double.infinity,
                         child: FilledButton.icon(
                           onPressed: () =>
-                              context.goNamed(RouteNames.reader,
+                              context.pushNamed(RouteNames.reader,
                                   pathParameters: {'id': '$bookId'}),
                           icon: const Icon(Icons.menu_book),
                           label: Text(book.readingProgress > 0

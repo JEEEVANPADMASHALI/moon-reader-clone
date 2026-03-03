@@ -43,11 +43,11 @@ class BookListItem extends StatelessWidget {
         '${(book.readingProgress * 100).toStringAsFixed(0)}%',
         style: Theme.of(context).textTheme.bodySmall,
       ),
-      onTap: () => context.goNamed(
+      onTap: () => context.pushNamed(
         RouteNames.reader,
         pathParameters: {'id': '${book.id}'},
       ),
-      onLongPress: () => context.goNamed(
+      onLongPress: () => context.pushNamed(
         RouteNames.bookDetail,
         pathParameters: {'id': '${book.id}'},
       ),

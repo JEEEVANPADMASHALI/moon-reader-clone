@@ -40,7 +40,7 @@ class ReadingProgressBar extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.settings_outlined, size: 20),
                 onPressed: () =>
-                    context.goNamed(RouteNames.readingSettings),
+                    context.pushNamed(RouteNames.readingSettings),
               ),
             ],
           ),

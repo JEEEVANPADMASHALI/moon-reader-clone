@@ -26,15 +26,15 @@ class LibraryScreen extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.collections_bookmark_outlined),
-            onPressed: () => context.goNamed(RouteNames.collections),
+            onPressed: () => context.pushNamed(RouteNames.collections),
           ),
           IconButton(
             icon: const Icon(Icons.bar_chart),
-            onPressed: () => context.goNamed(RouteNames.statistics),
+            onPressed: () => context.pushNamed(RouteNames.statistics),
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => context.goNamed(RouteNames.settings),
+            onPressed: () => context.pushNamed(RouteNames.settings),
           ),
           IconButton(
             icon: Icon(

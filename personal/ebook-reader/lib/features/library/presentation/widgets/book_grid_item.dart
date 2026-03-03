@@ -11,11 +11,11 @@ class BookGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.goNamed(
+      onTap: () => context.pushNamed(
         RouteNames.reader,
         pathParameters: {'id': '${book.id}'},
       ),
-      onLongPress: () => context.goNamed(
+      onLongPress: () => context.pushNamed(
         RouteNames.bookDetail,
         pathParameters: {'id': '${book.id}'},
       ),
