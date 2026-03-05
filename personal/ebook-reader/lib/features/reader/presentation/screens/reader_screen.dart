@@ -21,23 +21,39 @@ class ReaderScreen extends ConsumerStatefulWidget {
 
 class _ReaderScreenState extends ConsumerState<ReaderScreen>
     with WidgetsBindingObserver {
-  ReaderSessionTracker? _tracker;
+  // Cached so they remain accessible in dispose() after ref is invalid.
+  AppDatabase? _db;
+  int? _sessionId;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _tracker = ReaderSessionTracker(ref);
-      _tracker!.startSession(widget.bookId);
+      _db = ref.read(appDatabaseProvider);
+      _startSession();
       _applyWakeLock();
     });
+  }
+
+  Future<void> _startSession() async {
+    final db = _db;
+    if (db == null) return;
+    _sessionId = await db.statsDao.startSession(widget.bookId);
+  }
+
+  Future<void> _endSession() async {
+    final id = _sessionId;
+    final db = _db;
+    if (id == null || db == null) return;
+    _sessionId = null;
+    await db.statsDao.endSession(id, 0, 0);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _tracker?.endSession();
+    _endSession();
     WakelockPlus.disable();
     super.dispose();
   }
@@ -45,9 +61,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      _tracker?.endSession();
+      _endSession();
     } else if (state == AppLifecycleState.resumed) {
-      _tracker?.startSession(widget.bookId);
+      _startSession();
     }
   }
 
@@ -103,14 +119,14 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           filePath: filePath,
           bookId: widget.bookId,
           settings: settings,
-          onPageChanged: (_) => _tracker?.recordPageTurn(),
+          onPageChanged: (_) {},
         );
       case 'pdf':
         return PdfReaderWidget(
           filePath: filePath,
           bookId: widget.bookId,
           settings: settings,
-          onPageChanged: (_) => _tracker?.recordPageTurn(),
+          onPageChanged: (_) {},
         );
       case 'cbz':
       case 'cbr':
@@ -118,7 +134,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           filePath: filePath,
           bookId: widget.bookId,
           settings: settings,
-          onPageChanged: (_) => _tracker?.recordPageTurn(),
+          onPageChanged: (_) {},
         );
       case 'txt':
       default:
@@ -126,7 +142,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           filePath: filePath,
           bookId: widget.bookId,
           settings: settings,
-          onPageChanged: (_) => _tracker?.recordPageTurn(),
+          onPageChanged: (_) {},
         );
     }
   }
